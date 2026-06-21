@@ -22,7 +22,9 @@ import {
   CheckCircle2,
   Github,
   Star,
-  GitBranch
+  GitBranch,
+  Briefcase,
+  Award
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
@@ -31,9 +33,10 @@ interface ProjectPreviewModalProps {
   project: Project | null;
   isOpen: boolean;
   onClose: () => void;
+  recruiterMode?: boolean;
 }
 
-export default function ProjectPreviewModal({ project, isOpen, onClose }: ProjectPreviewModalProps) {
+export default function ProjectPreviewModal({ project, isOpen, onClose, recruiterMode = false }: ProjectPreviewModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0); // 0 = idle, 1 = running steps, 2 = success output
   const [logMessages, setLogMessages] = useState<string[]>([]);
@@ -373,7 +376,144 @@ export default function ProjectPreviewModal({ project, isOpen, onClose }: Projec
           </div>
 
           {/* Modal Body Container */}
-          <div className="flex-1 overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+          {recruiterMode ? (
+            <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 max-h-[82vh] bg-slate-50 dark:bg-slate-900/10">
+              
+              {/* Executive Summary Row */}
+              <div className="bg-white dark:bg-slate-950 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center shadow-sm">
+                <div className="space-y-1.5 flex-1 select-none">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[9px] font-mono font-black text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/10 select-none uppercase tracking-wider">
+                      ★ Active Recruiter Vetting
+                    </span>
+                    <span className="text-[9px] font-mono font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/10">
+                      Role: {project.role}
+                    </span>
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 dark:text-white text-base tracking-tight leading-tight">
+                    {project.title}
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xl">
+                    {project.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-1 md:max-w-[240px] justify-start md:justify-end">
+                  {project.toolsUsed.map((tool, idx) => (
+                    <span key={idx} className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono text-[9px] px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grid Content */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* Left card: Background & Objective */}
+                <div className="space-y-6">
+                  <div className="bg-white dark:bg-slate-950 p-5 rounded-xl border border-slate-205 dark:border-slate-850 shadow-sm space-y-2">
+                    <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                      <Briefcase className="w-4 h-4 shrink-0" />
+                      <h5 className="font-bold text-xs uppercase font-mono tracking-wider">
+                        The Business Gaps & Challenge
+                      </h5>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {project.businessProblem}
+                    </p>
+                  </div>
+
+                  <div className="bg-white dark:bg-slate-950 p-5 rounded-xl border border-slate-205 dark:border-slate-850 shadow-sm space-y-2">
+                    <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                      <Award className="w-4 h-4 shrink-0" />
+                      <h5 className="font-bold text-xs uppercase font-mono tracking-wider">
+                        Objective & Ahmad's Contribution
+                      </h5>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {project.objective}
+                    </p>
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-850 mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                      <strong>Alignment Value:</strong> {project.recruiterValue}
+                    </div>
+                  </div>
+
+                  <div className="bg-white dark:bg-slate-950 p-5 rounded-xl border border-slate-205 dark:border-slate-850 shadow-sm space-y-2">
+                    <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                      <FileText className="w-4 h-4 shrink-0" />
+                      <h5 className="font-bold text-xs uppercase font-mono tracking-wider">
+                        Verified Execution Workflow
+                      </h5>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {project.workflow.join(" ")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right card: Main Engineered Assets & Results */}
+                <div className="space-y-6">
+                  
+                  {/* Prompt strategy */}
+                  <div className="bg-indigo-950/20 p-5 rounded-xl border border-indigo-900/30 space-y-2.5">
+                    <div className="flex items-center gap-1.5 text-indigo-400 font-bold">
+                      <Sparkles className="w-4 h-4 shrink-0" />
+                      <h5 className="font-bold text-xs uppercase font-mono tracking-wider">
+                        Engineered System Prompt Directive
+                      </h5>
+                    </div>
+                    <p className="text-[11px] text-indigo-300 italic leading-snug">
+                      Below is the system directive written by Ahmad to prime the Gemini model:
+                    </p>
+                    
+                    <div className="bg-slate-950 p-3 rounded-lg border border-slate-900 text-[10px] font-mono text-slate-300 leading-relaxed whitespace-pre-wrap max-h-[160px] overflow-y-auto">
+                      {project.id === "proj-1" && `[System Directive: Premium Text Synthesizer]\nRole: Expert Copywriter & Enterprise Content-Strategist\nTask: Generate tech briefings on "${p1Topic}" with Tone "${p1Tone}"\nConstraints: Use absolute active voice, maintain optimal token density.`}
+                      {project.id === "proj-2" && `[System Directive: Blog Structure Outline]\nRole: CTO Blog Orchestrator\nTask: Draft post on "${p2Topic}" for standard CTO audience.`}
+                      {project.id === "proj-3" && `[System Directive: Strict Grounding Evaluator]\nRule: Ground decisions in compliance indexes with correctness of ${p3GroundingRatio}%.`}
+                      {project.id === "proj-4" && `[System Directive: Natural SEO Integrator]\nObjective: Insert term "${p4Keyword}" without keyword stuffing penalties.`}
+                      {project.id === "proj-5" && `[System Directive: Pro Style Auditor]\nMode: Audit draft to prune Typical ChatGPT keywords under rubric "${p5Strictness}".`}
+                      {project.id === "p5" || project.id === "proj-6" ? `[System Directive: Strategy Planner]\nTimeline: ${p6Weeks} weeks campaign schedule outlining social media dissemination.` : ""}
+                      {project.id === "proj-7" && `[System Directive: Microservice Route Mock]\nObjective: Validate fast endpoint JSON connection to "${p7Endpoint}".`}
+                      {project.id === "proj-8" && `[System Directive: Conceptual Outlining]\nOutline Depth: "${p8Depth}" level mapping for base concept "${p8Concept}".`}
+                      {project.id === "proj-9" && `[System Directive: Metric Compilation API]\nTask: Calculate KPI "${p9Metric}" ratio data summaries over timeframe "${p9Scale}".`}
+                      {project.id === "proj-10" && `[System Directive: Compliance Governance Tracker]\nRules: Evaluate policy against "${p10Standard}" standard guidelines.`}
+                    </div>
+                  </div>
+
+                  {/* Delivery verification result payload */}
+                  <div className="bg-emerald-950/20 p-5 rounded-xl border border-emerald-900/30 space-y-2.5">
+                    <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                      <CheckCircle className="w-4 h-4 shrink-0" />
+                      <h5 className="font-bold text-xs uppercase font-mono tracking-wider">
+                        Pre-Validated Delivery Artifact
+                      </h5>
+                    </div>
+                    <p className="text-[11px] text-emerald-300 italic leading-snug">
+                      The successful deployment outcome payload validated by the human-in-the-loop:
+                    </p>
+
+                    <div className="bg-slate-950 p-3.5 rounded-lg border border-slate-900 text-[10px] font-mono text-emerald-300 leading-normal max-h-[160px] overflow-y-auto">
+                      {project.id === "proj-1" && `<h3>Developing ${p1Topic}</h3>\n<p>By bypassing key bottlenecks via decoupled models, response loops achieve high execution velocity without crashing secondary tasks.</p>`}
+                      {project.id === "proj-2" && `★ Post Outline: 1. The Cost of Thread Latency | 2. Memory Gaps | 3. Ahmad's Tuning Methods.`}
+                      {project.id === "proj-3" && `✔ Audit SLA: Backup checks are fully green and compliant.`}
+                      {project.id === "proj-4" && `✔ Optimized Term Insertion: Seamlessly integrated "${p4Keyword}" to raise content relevance.`}
+                      {project.id === "proj-5" && `✔ Style Audited: Generic transitions (e.g. leverage, delve) pruned completely.`}
+                      {project.id === "proj-6" && `✔ Social Campaign Map compiled for: ${p6Pillar}`}
+                      {project.id === "proj-7" && `✔ Response Payload status 200 OK for endpoint ${p7Endpoint}`}
+                      {project.id === "proj-8" && `✔ Outline tree assembled successfully for ${p8Concept}`}
+                      {project.id === "proj-9" && `✔ KPI metrics trends (+14.2% over ${p9Scale})`}
+                      {project.id === "proj-10" && `✔ Compliance checked for Standard "${p10Standard}". APPROVED FOR RELEASE.`}
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
             
             {/* LEFT COLUMN: CONTROLS & PARMS TUNING (md:col-span-4) */}
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-850 rounded-xl p-5 space-y-5 h-fit">
@@ -1262,6 +1402,7 @@ print("HTTP STATUS: ", r.status_code)`}
             </div>
 
           </div>
+          )}
 
           {/* Modal Footer / Summary Actions */}
           <div className="bg-slate-50 dark:bg-slate-900 px-6 py-4 border-t border-slate-205 dark:border-slate-800 flex justify-between items-center text-[10px] text-slate-500 font-mono select-none shrink-0 flex-wrap gap-3">

@@ -85,9 +85,24 @@ export default function App() {
     return false;
   });
 
+  const [recruiterMode, setRecruiterMode] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("recruiter_mode");
+      return saved === "true";
+    }
+    return false;
+  });
+
   useEffect(() => {
     localStorage.setItem("theme_mode", darkMode ? "dark" : "light");
   }, [darkMode]);
+
+  useEffect(() => {
+    localStorage.setItem("recruiter_mode", recruiterMode ? "true" : "false");
+    if (recruiterMode && (activeTab === "ats" || activeTab === "branding")) {
+      setActiveTab("resume");
+    }
+  }, [recruiterMode, activeTab]);
   
   // Resume specific state
   const [plainTextMode, setPlainTextMode] = useState(false);
@@ -272,7 +287,7 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
           >
             <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "resume" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
             <FileText className="w-4 h-4 shrink-0 text-indigo-300" />
-            <span className="truncate">ATS CV & Skill Map</span>
+            <span className="truncate">{recruiterMode ? "Curriculum Vitae" : "ATS CV & Skill Map"}</span>
           </button>
 
           <button
@@ -285,21 +300,23 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
           >
             <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "portfolio" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
             <FolderOpen className="w-4 h-4 shrink-0 text-indigo-300" />
-            <span className="truncate">Portfolio (10 Projects)</span>
+            <span className="truncate">{recruiterMode ? "Project Case Studies" : "Portfolio (10 Projects)"}</span>
           </button>
 
-          <button
-            onClick={() => setActiveTab("ats")}
-            className={`w-full px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-3 transition-colors text-left ${
-              activeTab === "ats"
-                ? "bg-indigo-600 text-white"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white"
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "ats" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
-            <Sliders className="w-4 h-4 shrink-0 text-indigo-300" />
-            <span className="truncate">Interactive ATS Optimizer</span>
-          </button>
+          {!recruiterMode && (
+            <button
+              onClick={() => setActiveTab("ats")}
+              className={`w-full px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-3 transition-colors text-left ${
+                activeTab === "ats"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+              }`}
+            >
+              <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "ats" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
+              <Sliders className="w-4 h-4 shrink-0 text-indigo-300" />
+              <span className="truncate">Interactive ATS Optimizer</span>
+            </button>
+          )}
 
           <button
             onClick={() => setActiveTab("chat")}
@@ -311,21 +328,23 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
           >
             <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "chat" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
             <Brain className="w-4 h-4 shrink-0 text-indigo-300" />
-            <span className="truncate">AI Recruiter Chat</span>
+            <span className="truncate">{recruiterMode ? "AI Chat & Summary" : "AI Recruiter Chat"}</span>
           </button>
 
-          <button
-            onClick={() => setActiveTab("branding")}
-            className={`w-full px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-3 transition-colors text-left ${
-              activeTab === "branding"
-                ? "bg-indigo-600 text-white"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white"
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "branding" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
-            <Linkedin className="w-4 h-4 shrink-0 text-indigo-300" />
-            <span className="truncate">LinkedIn & Notion Assets</span>
-          </button>
+          {!recruiterMode && (
+            <button
+              onClick={() => setActiveTab("branding")}
+              className={`w-full px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-3 transition-colors text-left ${
+                activeTab === "branding"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+              }`}
+            >
+              <div className={`w-2 h-2 rounded-full shrink-0 ${activeTab === "branding" ? "bg-white animate-pulse" : "bg-transparent"}`}></div>
+              <Linkedin className="w-4 h-4 shrink-0 text-indigo-300" />
+              <span className="truncate">LinkedIn & Notion Assets</span>
+            </button>
+          )}
         </nav>
 
         {/* Sidebar bottom Profile panel */}
@@ -386,7 +405,7 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
                   }`}
                 >
                   <FileText className="w-4 h-4 text-indigo-300" />
-                  <span>ATS CV & Skill Map</span>
+                  <span>{recruiterMode ? "Curriculum Vitae" : "ATS CV & Skill Map"}</span>
                 </button>
                 <button
                   onClick={() => { setActiveTab("portfolio"); setMobileMenuOpen(false); }}
@@ -395,17 +414,19 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
                   }`}
                 >
                   <FolderOpen className="w-4 h-4 text-indigo-300" />
-                  <span>Portfolio (10 Projects)</span>
+                  <span>{recruiterMode ? "Project Case Studies" : "Portfolio (10 Projects)"}</span>
                 </button>
-                <button
-                  onClick={() => { setActiveTab("ats"); setMobileMenuOpen(false); }}
-                  className={`w-full px-3 py-2 rounded-md text-xs font-medium flex items-center gap-3 transition-colors ${
-                    activeTab === "ats" ? "bg-indigo-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                  }`}
-                >
-                  <Sliders className="w-4 h-4 text-indigo-300" />
-                  <span>Interactive ATS Optimizer</span>
-                </button>
+                {!recruiterMode && (
+                  <button
+                    onClick={() => { setActiveTab("ats"); setMobileMenuOpen(false); }}
+                    className={`w-full px-3 py-2 rounded-md text-xs font-medium flex items-center gap-3 transition-colors ${
+                      activeTab === "ats" ? "bg-indigo-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                    }`}
+                  >
+                    <Sliders className="w-4 h-4 text-indigo-300" />
+                    <span>Interactive ATS Optimizer</span>
+                  </button>
+                )}
                 <button
                   onClick={() => { setActiveTab("chat"); setMobileMenuOpen(false); }}
                   className={`w-full px-3 py-2 rounded-md text-xs font-medium flex items-center gap-3 transition-colors ${
@@ -413,17 +434,19 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
                   }`}
                 >
                   <Brain className="w-4 h-4 text-indigo-300" />
-                  <span>AI Recruiter Chat</span>
+                  <span>{recruiterMode ? "AI Chat & Summary" : "AI Recruiter Chat"}</span>
                 </button>
-                <button
-                  onClick={() => { setActiveTab("branding"); setMobileMenuOpen(false); }}
-                  className={`w-full px-3 py-2 rounded-md text-xs font-medium flex items-center gap-3 transition-colors ${
-                    activeTab === "branding" ? "bg-indigo-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                  }`}
-                >
-                  <Linkedin className="w-4 h-4 text-indigo-300" />
-                  <span>LinkedIn & Notion Assets</span>
-                </button>
+                {!recruiterMode && (
+                  <button
+                    onClick={() => { setActiveTab("branding"); setMobileMenuOpen(false); }}
+                    className={`w-full px-3 py-2 rounded-md text-xs font-medium flex items-center gap-3 transition-colors ${
+                      activeTab === "branding" ? "bg-indigo-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                    }`}
+                  >
+                    <Linkedin className="w-4 h-4 text-indigo-300" />
+                    <span>LinkedIn & Notion Assets</span>
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
@@ -449,6 +472,28 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
             <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400">Specialist Level: Specialist (2+ Years Verified Credentials) • Status: Recruiter Ready</p>
           </div>
           <div className="flex items-center gap-6 shrink-0 border-t border-slate-100 dark:border-slate-850 pt-3 md:pt-0 md:border-0">
+            {/* Elegant Recruiter View Toggle */}
+            <button
+              onClick={() => setRecruiterMode(!recruiterMode)}
+              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-lg border transition-all shadow-sm cursor-pointer select-none ${
+                recruiterMode
+                  ? "bg-emerald-600 border-emerald-500 text-white hover:bg-emerald-700 font-bold"
+                  : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-705 text-slate-700 dark:text-slate-300 hover:border-indigo-405 hover:bg-indigo-50/10 dark:hover:border-indigo-900"
+              }`}
+              title="Toggle Recruiter View (Simplified Read-Only Mode)"
+              id="recruiter-mode-toggle"
+            >
+              <Briefcase className={`w-4 h-4 shrink-0 ${recruiterMode ? "text-white" : "text-indigo-600 dark:text-indigo-400"}`} />
+              <div className="text-left">
+                <span className="text-[9px] font-bold font-mono tracking-wider block leading-none">
+                  {recruiterMode ? "RECRUITER MODE: ON" : "RECRUITER VIEW"}
+                </span>
+                <span className="text-[7px] font-mono opacity-80 block leading-tight mt-0.5">
+                  {recruiterMode ? "CV + PROJECTS + CHAT" : "SIMPLIFY PRESENTATION"}
+                </span>
+              </div>
+            </button>
+
             {/* Elegant Theme Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
@@ -562,45 +607,64 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
                 </div>
 
                 {/* CV Presentation Mode Control Banner */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm no-print">
-                  <div>
-                    <h3 className="font-bold text-sm text-slate-850">ATS Presentation Modes</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">Test compatibility with standard parser interfaces.</p>
+                {!recruiterMode ? (
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm no-print">
+                    <div>
+                      <h3 className="font-bold text-sm text-slate-850">ATS Presentation Modes</h3>
+                      <p className="text-xs text-slate-500 mt-0.5">Test compatibility with standard parser interfaces.</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setPlainTextMode(false)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border transition-colors ${
+                          !plainTextMode 
+                            ? "bg-slate-900 text-white border-slate-900" 
+                            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                        }`}
+                      >
+                        Formatted Grid View
+                      </button>
+                      <button
+                        onClick={() => setPlainTextMode(true)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border flex items-center gap-1.5 transition-colors ${
+                          plainTextMode 
+                            ? "bg-slate-900 text-white border-slate-900" 
+                            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                        }`}
+                      >
+                        <Terminal className="w-3.5 h-3.5" />
+                        ATS Plain-Text Output
+                      </button>
+                      <button
+                        onClick={() => window.print()}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 transition-colors shadow-sm cursor-pointer"
+                        title="Print CV or save as PDF"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        Print CV to PDF
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setPlainTextMode(false)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border transition-colors ${
-                        !plainTextMode 
-                          ? "bg-slate-900 text-white border-slate-900" 
-                          : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                      }`}
-                    >
-                      Formatted Grid View
-                    </button>
-                    <button
-                      onClick={() => setPlainTextMode(true)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border flex items-center gap-1.5 transition-colors ${
-                        plainTextMode 
-                          ? "bg-slate-900 text-white border-slate-900" 
-                          : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                      }`}
-                    >
-                      <Terminal className="w-3.5 h-3.5" />
-                      ATS Plain-Text Output
-                    </button>
+                ) : (
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-emerald-50 dark:bg-slate-900/60 border border-emerald-100 dark:border-slate-800 p-5 rounded-xl shadow-sm no-print">
+                    <div>
+                      <h3 className="font-bold text-sm text-emerald-800 dark:text-emerald-450 flex items-center gap-1.5">
+                        <CheckCircle className="w-4 h-4" />
+                        Recruiter-Optimized Presentation Active
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">Hiding technical sandboxes and showing verified resume and portfolio case study records.</p>
+                    </div>
                     <button
                       onClick={() => window.print()}
-                      className="px-3 py-1.5 rounded-lg text-xs font-semibold font-mono border flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 transition-colors shadow-sm cursor-pointer"
-                      title="Print CV or save as PDF"
+                      className="px-4 py-2 rounded-lg text-xs font-semibold font-mono border flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-605 transition-colors shadow-sm cursor-pointer shrink-0"
                     >
                       <Printer className="w-3.5 h-3.5" />
-                      Print CV to PDF
+                      Save Complete Profile as PDF
                     </button>
                   </div>
-                </div>
+                )}
 
-                {plainTextMode ? (
+                {(plainTextMode && !recruiterMode) ? (
                   // Plain-Text Copyable ATS Emulation View
                   <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
                     <div className="flex justify-between items-center flex-wrap gap-2">
@@ -978,7 +1042,7 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
                                   className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-lg text-xs font-bold font-mono shadow-sm hover:shadow transition-all hover:-translate-y-0.5 cursor-pointer no-print"
                                 >
                                   <PlayCircle className="w-3.5 h-3.5" />
-                                  Live Preview
+                                  {recruiterMode ? "View Case Study Story" : "Live Preview"}
                                 </button>
                               </div>
                             ) : (
@@ -1635,6 +1699,7 @@ ${cvData.achievements.map((a) => `- ${a}`).join("\n")}`;
             project={previewProject}
             isOpen={previewProject !== null}
             onClose={() => setPreviewProject(null)}
+            recruiterMode={recruiterMode}
           />
 
           {/* Dynamic copyright Footer */}
