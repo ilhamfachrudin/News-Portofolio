@@ -1,0 +1,6 @@
+{
+  "name": "AI Content Specialist Portfolio Suite",
+  "description": "ATS-optimized professional resume, 10-project portfolio, keyword matcher, and interactive recruiter chat suite for Ahmad Ilham Fachrudin Nur Yahya.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* --- Professional Developer-Dark Mode Overrides --- */
+
+.dark {
+  /* Dynamic custom overrides for tailwind utility classes when under the dark container wrapper */
+  --color-slate-50: #090d16;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #1e293b;
+  --color-white: #0f172a;
+}
+
+.dark .bg-slate-50 {
+  background-color: #090d16 !important;
+}
+
+.dark .bg-white {
+  background-color: #0f172a !important;
+}
+
+.dark .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-850 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-650 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-550 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-400 {
+  color: #64748b !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-150,
+.dark .border-slate-100 {
+  border-color: #1e293b !important;
+}
+
+.dark .bg-slate-50\/50 {
+  background-color: rgba(15, 23, 42, 0.5) !important;
+}
+
+.dark .bg-slate-50\/80 {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1e293b !important;
+}
+
+.dark .hover\:bg-slate-100:hover {
+  background-color: #1e293b !important;
+}
+
+/* Form Controls and Interactive States */
+.dark textarea,
+.dark input[type="text"] {
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+  border-color: #1e293b !important;
+}
+
+.dark textarea::placeholder,
+.dark input[type="text"]::placeholder {
+  color: #64748b !important;
+}
+
+/* Indigo Advisory Panels adaption in Dark Mode */
+.dark .bg-indigo-50 {
+  background-color: rgba(30, 27, 75, 0.5) !important;
+  border-color: rgba(67, 56, 202, 0.4) !important;
+  color: #e0e7ff !important;
+}
+
+.dark .bg-indigo-50\/50 {
+  background-color: rgba(30, 27, 75, 0.3) !important;
+}
+
+.dark .text-indigo-900,
+.dark .text-indigo-800,
+.dark .text-indigo-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-indigo-600 {
+  color: #a5b4fc !important;
+}
+
+/* Green feedback boxes adapting */
+.dark .bg-green-50 {
+  background-color: rgba(6, 78, 59, 0.25) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #d1fae5 !important;
+}
+
+.dark .text-green-850,
+.dark .text-green-800,
+.dark .text-green-700 {
+  color: #a7f3d0 !important;
+}
+
+/* Skill indicators & charts */
+.dark .bg-indigo-605 {
+  background-color: #6366f1 !important;
+}
+
+.dark .text-indigo-650 {
+  color: #a5b4fc !important;
+}
+
+
+/* --- Professional Print Stylesheet for CV/PDF --- */
+@media print {
+  /* Set standard A4/Letter size margins and hide default browser headers/footers if possible */
+  @page {
+    size: letter;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
+  /* Hide UI controls, navigations, sidebars and chat bots */
+  .no-print,
+  .no-print-banner,
+  aside,
+  header,
+  nav,
+  input,
+  textarea,
+  iframe,
+  button,
+  #theme-mode-toggle,
+  [role="button"] {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Reset layout constraints to flow naturally in height instead of staying locked in h-screen */
+  html, body, #root, .h-screen, .w-screen, .overflow-hidden, .flex, .flex-1, .overflow-y-auto {
+    height: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Override background styling to pure white for crisp, high-contrast text and ink saving */
+  .bg-slate-50,
+  .bg-slate-100,
+  .bg-slate-900,
+  .bg-slate-950,
+  .dark .bg-slate-900,
+  .dark .bg-slate-950 {
+    background-color: #ffffff !important;
+  }
+
+  /* Ensure the printable CV area spans fully and displays nicely */
+  #printable-cv-area {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Structure internal grids for standard vertical printing flow */
+  #printable-cv-area .grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Map column layout exactly for print */
+  #printable-cv-area .md\:col-span-7 {
+    grid-column: span 7 / span 7 !important;
+  }
+
+  #printable-cv-area .md\:col-span-5 {
+    grid-column: span 5 / span 5 !important;
+  }
+
+  #printable-cv-area .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #printable-cv-area .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* Reset spacing and border/corners styling to be elegant on paper */
+  #printable-cv-area .rounded-xl,
+  #printable-cv-area .rounded-lg {
+    border-radius: 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Profile Spotlight styling adjustments for print format */
+  #printable-cv-area .w-24,
+  #printable-cv-area .h-24,
+  #printable-cv-area .md\:w-28,
+  #printable-cv-area .md\:h-28 {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 9999px !important;
+  }
+
+  /* Force exact colors on print */
+  p, h1, h2, h3, h4, span, li, a, td, th {
+    color: #1e293b !important;
+  }
+  
+  h1 {
+    color: #0f172a !important;
+  }
+  h2, h3, h5, h6 {
+    color: #1e293b !important;
+  }
+
+  /* Special accent styles (like Indigo Pills or highlight indicators) */
+  .bg-indigo-50, 
+  .dark .bg-indigo-50\/50,
+  .bg-indigo-50\/50 {
+    background-color: #f5f3ff !important;
+    border-color: #ddd6fe !important;
+  }
+
+  .text-indigo-600,
+  .text-indigo-700,
+  .text-indigo-800,
+  .text-indigo-650,
+  .dark .text-indigo-400 {
+    color: #4f46e5 !important;
+  }
+
+  .bg-green-50,
+  .bg-green-50\/50 {
+    background-color: #f0fdf4 !important;
+    border-color: #bbf7d0 !important;
+  }
+
+  .text-green-700,
+  .text-green-800,
+  .text-green-850 {
+    color: #15803d !important;
+  }
+
+  /* Hide avatar active online dot pulse in print */
+  .animate-ping,
+  .bg-green-500 {
+    display: none !important;
+  }
+
+  /* Work experience bullet timelines layout fixes */
+  #printable-cv-area .pl-4.border-l-2 {
+    border-left: 2px solid #cbd5e1 !important;
+  }
+
+  #printable-cv-area .absolute.-left-\[24px\] {
+    left: -21px !important;
+    background-color: #4f46e5 !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Performance charts bars styling on print */
+  .bg-indigo-600 {
+    background-color: #4f46e5 !important;
+    display: block !important;
+    height: 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force proof table styles */
+  th {
+    background-color: #f1f5f9 !important;
+    color: #334155 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  /* Prevent page breaks inside critical elements */
+  section, 
+  table, 
+  tr, 
+  ul, 
+  li, 
+  .rounded-xl {
+    page-break-inside: avoid !important;
+  }
+}
